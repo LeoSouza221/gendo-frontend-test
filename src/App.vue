@@ -1,17 +1,22 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+    <img
+      alt="Vue logo"
+      class="logo"
+      src="./assets/logo.svg"
+      width="125"
+      height="125"
+    />
 
     <div class="wrapper">
-        teste
+      <span class="text-9xl">Teste</span>
     </div>
   </header>
 
   <main>
-      teste
+    <span class="text-9xl">Teste</span>
   </main>
 </template>
 
