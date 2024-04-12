@@ -1,4 +1,15 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted } from 'vue';
+import http from './lib/http';
+
+onMounted(async () => {
+  const user = await http.get('api/users/LeoSouza221');
+  const repos = await http.get('api/users/LeoSouza221/repos');
+  const starred = await http.get('api/users/LeoSouza221/starred');
+
+  console.log(repos, user, starred);
+});
+</script>
 
 <template>
   <header>

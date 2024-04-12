@@ -12,9 +12,13 @@ export default defineConfig({
       test: fileURLToPath(new URL('./test', import.meta.url)),
     },
   },
-  // server: {
-  //   proxy: {
-  //     '/api': 'http://localhost:8080',
-  //   },
-  // },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://api.github.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
 });
