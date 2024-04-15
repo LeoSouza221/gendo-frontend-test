@@ -1,33 +1,14 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import http from './lib/http';
-
-onMounted(async () => {
-  const user = await http.get('api/users/LeoSouza221');
-  const repos = await http.get('api/users/LeoSouza221/repos');
-  const starred = await http.get('api/users/LeoSouza221/starred');
-
-  console.log(repos, user, starred);
-});
+import { AppHeader } from '@/components';
+import Home from '@/pages/home/Home.vue';
 </script>
 
 <template>
-  <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="./assets/logo.svg"
-      width="125"
-      height="125"
-    />
+  <AppHeader></AppHeader>
 
-    <div class="wrapper">
-      <span class="text-9xl">Teste</span>
-    </div>
-  </header>
-
-  <main>
-    <span class="text-9xl">Teste</span>
+  <main class="container mx-auto">
+    <Home />
   </main>
 </template>
 
