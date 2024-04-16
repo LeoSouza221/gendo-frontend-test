@@ -9,6 +9,10 @@ const server = setupServer(
     counter += 1;
     return HttpResponse.json({});
   }),
+  http.get('api/users/LeoSouza221/repos', () => {
+    counter += 1;
+    return HttpResponse.json({});
+  }),
 );
 
 beforeEach(() => {
@@ -25,11 +29,11 @@ describe.only('Home', () => {
     render(Home);
 
     await waitFor(() => {
-      expect(counter).toBe(1);
+      expect(counter).toBe(2);
     });
   });
 
-  it('should be loading when load the screen', () => {
+  it('should be loading when open the screen', () => {
     render(Home);
 
     expect(screen.queryByRole('status')).toBeInTheDocument();
@@ -63,23 +67,42 @@ describe.only('Home', () => {
   //   it('display error message on screen', async () => {
   //     render(Home);
 
-  //     let resolveFunc;
-  //     const promise = new Promise((resolve) => {
-  //       resolveFunc = resolve;
-  //     });
-
   //     server.use(
-  //       http.get('api/users/LeoSouza123123', async ({}) => {
-  //         await promise;
-  //         return HttpResponse.json({ message: 'Not Found' }, { status: 404 });
+  //       http.get('api/users/LeoSouza123', () => {
+  //         return HttpResponse.error();
   //       }),
   //     );
 
-  //     await resolveFunc();
-
-  //     await waitFor(() => {
-  //       expect(screen.queryByText('Not Found')).toBeInTheDocument();
-  //     });
+  //     const text = await screen.findByText('Unnexpected Error');
+  //     expect(text).toBeInTheDocument();
   //   });
   // });
+
+  describe('when success to load repositories', () => {
+    it('display repositories on screen', async () => {
+      render(Home);
+
+      let resolveFunc;
+      const promise = new Promise((resolve) => {
+        resolveFunc = resolve;
+      });
+
+      server.use(
+        http.get('api/users/LeoSouza221/repos', async ({}) => {
+          await promise;
+          return HttpResponse.json([
+            { full_name: 'repo1' },
+            { full_name: 'repo2' },
+            { full_name: 'repo3' },
+          ]);
+        }),
+      );
+
+      await resolveFunc();
+
+      await waitFor(() => {
+        expect(screen.queryAllByText(/repo/).length).toBe(3);
+      });
+    });
+  });
 });

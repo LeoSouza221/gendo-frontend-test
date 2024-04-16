@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, reactive, provide } from 'vue';
-import { UserDetailsSide, AppSpin } from '@/components';
+import { UserDetailsSide, UserDetailsRepositories, AppSpin } from '@/components';
 import { type User } from '@/@types';
 import http from '@/lib/http';
 
 const loading = ref(true);
-const errorMessage = ref(undefined);
+const errorMessage = ref<string | undefined>(undefined);
 const userName = ref('LeoSouza221');
 const user = reactive<User>({
   id: 0,
@@ -17,33 +17,49 @@ const user = reactive<User>({
 });
 provide('user', user);
 
-onMounted(async () => {
-  getUser();
+onMounted(() => {
+  getUserDetails();
 });
 
-const getUser = async () => {
+const getUserDetails = () => {
   loading.value = true;
-  errorMessage.value = undefined;
-  try {
-    const response = await http.get(`api/users/${userName.value}`);
 
-    user.name = response.data.name;
-    user.bio = response.data.bio;
-    user.avatar_url = response.data.avatar_url;
-  } catch (apiError) {
-    console.log(apiError);
-    if (apiError?.response?.status === 404) {
-      errorMessage.value = apiError?.response?.data.message;
-    }
-  } finally {
-    loading.value = false;
-  }
+  Promise.all([getUser(), getRepositories()])
+    .then((result) => {
+      const [userResult, repositoriesResult] = result;
+
+      console.log(userResult, repositoriesResult);
+
+      user.name = userResult.name;
+      user.bio = userResult.bio;
+      user.avatar_url = userResult.avatar_url;
+      user.repos = repositoriesResult;
+    })
+    .catch((e) => {
+      console.log(e);
+      if (e?.response?.status === 404) {
+        errorMessage.value = e?.response?.data.message;
+        return;
+      }
+
+      errorMessage.value = 'Unnexpected Error';
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
-// const getRepositories = async () => {
-//   const repos = await http.get('api/users/LeoSouza221/repos');
+const getUser = async () => {
+  const response = await http.get(`api/users/${userName.value}`);
 
-// }
+  return response.data;
+};
+
+const getRepositories = async () => {
+  const response = await http.get('api/users/LeoSouza221/repos');
+
+  return response.data;
+};
 
 // const getStarredRepositories = async () => {
 //   const starred = await http.get('api/users/LeoSouza221/starred');
@@ -60,7 +76,9 @@ const getUser = async () => {
       <div>
         <UserDetailsSide />
       </div>
-      <div class="col-start-2">teste</div>
+      <div class="col-span-3">
+        <UserDetailsRepositories />
+      </div>
     </div>
     <div v-else>
       <span>{{ errorMessage }}</span>
