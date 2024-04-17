@@ -1,3 +1,14 @@
 export { default as AppHeader } from './AppHeader.vue';
+export { default as AppSpin } from './AppSpin.vue';
 export { default as UserDetailsSide } from './UserDetailsSide.vue';
+export { default as UserDetailsRepositories } from './UserDetailsRepositories.vue';
+export { default as ListRepos } from './ListRepos.vue';
+export { default as ErrorMessage } from './ErrorMessage.vue';
+export { default as AppTabs } from './tabs/AppTabs.vue';
+export { default as AppTab } from './tabs/AppTab.vue';
+export { default as AppInput } from './AppInput.vue';
 export { default as UserIcon } from './icons/UserIcon.vue';
+export { default as ForkIcon } from './icons/ForkIcon.vue';
+export { default as StarIcon } from './icons/StarIcon.vue';
+export { default as GithubIcon } from './icons/GithubIcon.vue';
+export { default as CodeIcon } from './icons/CodeIcon.vue';

@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-grey-900 px-3 py-1">
+  <header class="bg-grey-900 px-3 py-1 flex items-center">
     <img
       alt="Vue logo"
       class="logo"
@@ -8,7 +8,7 @@
       height="50"
     />
     <span class="mx-1"></span>
-    <div class="wrapper text-white">
+    <div class="text-white">
       <span class="font-open">Github profiles</span>
     </div>
   </header>

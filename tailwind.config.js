@@ -15,6 +15,8 @@ export default {
       'pale-grey': '#E1E4E8',
       'white-secondary': '#E3E3E3',
       'slate-grey-secondary': '#586069',
+      blue: '#3b82f6',
+      'blue-700': '#1d4ed8',
     },
     fontFamily: {
       sans: ['"Open Sans"', 'sans-serif'],
