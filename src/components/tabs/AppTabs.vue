@@ -22,7 +22,7 @@ provide('activeTabHash', activeTabHash);
 
 <template>
   <div class="">
-    <ul class="flex border-b border-white-secondary">
+    <ul class="w-full justify-around lg:justify-start flex border-b border-white-secondary">
       <li
         class="w-36 flex justify-center py-2 cursor-pointer text-slate-grey"
         :class="{

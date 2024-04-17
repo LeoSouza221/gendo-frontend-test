@@ -5,6 +5,8 @@ interface Repositories {
   id: number;
   language: string;
   stargazers_count: number;
+  name: string;
+  owner: { login: string };
 }
 
 export type { Repositories };

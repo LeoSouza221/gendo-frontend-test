@@ -95,11 +95,7 @@ describe.only('Home', () => {
       server.use(
         http.get('api/users/LeoSouza221/repos', async ({}) => {
           await promise;
-          return HttpResponse.json([
-            { full_name: 'repo/repo1' },
-            { full_name: 'repo/repo2' },
-            { full_name: 'repo/repo3' },
-          ]);
+          return HttpResponse.json([{ name: 'repo1' }, { name: 'repo2' }, { name: 'repo3' }]);
         }),
       );
 
@@ -124,9 +120,9 @@ describe.only('Home', () => {
         http.get('api/users/LeoSouza221/starred', async ({}) => {
           await promise;
           return HttpResponse.json([
-            { full_name: 'starred/starred1' },
-            { full_name: 'starred/starred2' },
-            { full_name: 'starred/starred3' },
+            { name: 'starred1', owner: { login: 'owner1' } },
+            { name: 'starred2', owner: { login: 'owner1' } },
+            { name: 'starred3', owner: { login: 'owner1' } },
           ]);
         }),
       );

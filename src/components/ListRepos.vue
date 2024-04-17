@@ -9,13 +9,9 @@ const { isStarred, repos } = defineProps<{
 }>();
 const search = ref('');
 
-const repoName = (name: string) => {
-  return isStarred ? name : name.split('/')[1];
-};
-
 const filteredRepos = computed(() => {
   return repos.filter((repo) =>
-    JSON.stringify(repo.full_name).toString().toLowerCase().includes(search.value.toLowerCase()),
+    JSON.stringify(repo.name).toString().toLowerCase().includes(search.value.toLowerCase()),
   );
 });
 </script>
@@ -35,12 +31,22 @@ const filteredRepos = computed(() => {
   >
     <li
       v-for="(repo, index) in filteredRepos"
-      v-key="repo.id ?? index"
+      :key="repo.id ?? index"
       class="py-5 border-b border-white-secondary"
     >
       <div class="px-6 lg:px-0">
-        <div class="pb-2">
-          <span class="text-blue font-bold">{{ repoName(repo.full_name) }}</span>
+        <div
+          class="pb-2"
+          v-if="isStarred"
+        >
+          <span class="text-blue">{{ repo.owner.login }} / </span>
+          <span class="text-blue font-bold">{{ repo.name }}</span>
+        </div>
+        <div
+          class="pb-2"
+          v-else
+        >
+          <span class="text-blue font-bold">{{ repo.name }}</span>
         </div>
         <div class="pb-4">
           <p class="text-sm text-slate-grey">{{ repo.description }}</p>
@@ -75,6 +81,7 @@ const filteredRepos = computed(() => {
 .list-enter-active,
 .list-leave-active {
   transition: all 0.5s ease;
+  transform: translateX(-30px);
 }
 .list-enter-from,
 .list-leave-to {

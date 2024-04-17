@@ -4,7 +4,7 @@ import ListRepos from '../ListRepos.vue';
 describe.only('ListRepos', () => {
   describe('when repos has at least one', () => {
     it('should display correct repositories on screen', async () => {
-      render(ListRepos, { props: { repos: [{ full_name: 'repo/repo 1' }] } });
+      render(ListRepos, { props: { repos: [{ name: 'repo 1' }] } });
 
       await waitFor(() => {
         expect(screen.queryAllByText(/repo/).length).toBe(1);
