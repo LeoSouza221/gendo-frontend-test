@@ -29,7 +29,7 @@ watch(activeTabHash, () => {
 
 <template>
   <div
-    class="p-8"
+    class="py-8"
     v-show="isActive"
   >
     <slot />

@@ -55,10 +55,14 @@ describe.only('TabsComponent', () => {
 
     it('should not see the tab 1 content', async () => {
       await render(TabsComponent);
+      const user = userEvent.setup();
+
+      const button = await screen.getByTestId('tab 2');
+      await user.click(button);
 
       const text = await screen.findByText('teste 1');
 
-      expect(text).toBeVisible();
+      expect(text).not.toBeVisible();
     });
   });
 });

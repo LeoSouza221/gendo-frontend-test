@@ -3,6 +3,7 @@ interface Repositories {
   description: string;
   forks: number;
   id: number;
+  language: string;
   stargazers_count: number;
 }
 

@@ -6,7 +6,7 @@ interface User {
   bio: string;
   avatar_url: string;
   repos: Repositories[];
-  starred_repos: [];
+  starred_repos: Repositories[];
 }
 
 export type { User };

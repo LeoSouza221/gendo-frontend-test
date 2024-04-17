@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, reactive, provide } from 'vue';
-import { UserDetailsSide, UserDetailsRepositories, AppSpin } from '@/components';
+import { UserDetailsSide, UserDetailsRepositories, AppSpin, ErrorMessage } from '@/components';
 import { type User } from '@/@types';
 import http from '@/lib/http';
 
@@ -24,16 +24,15 @@ onMounted(() => {
 const getUserDetails = () => {
   loading.value = true;
 
-  Promise.all([getUser(), getRepositories()])
+  Promise.all([getUser(), getRepositories(), getStarredRepositories()])
     .then((result) => {
-      const [userResult, repositoriesResult] = result;
-
-      console.log(userResult, repositoriesResult);
+      const [userResult, repositoriesResult, starredRepositories] = result;
 
       user.name = userResult.name;
       user.bio = userResult.bio;
       user.avatar_url = userResult.avatar_url;
       user.repos = repositoriesResult;
+      user.starred_repos = starredRepositories;
     })
     .catch((e) => {
       console.log(e);
@@ -61,17 +60,18 @@ const getRepositories = async () => {
   return response.data;
 };
 
-// const getStarredRepositories = async () => {
-//   const starred = await http.get('api/users/LeoSouza221/starred');
+const getStarredRepositories = async () => {
+  const response = await http.get('api/users/LeoSouza221/starred');
 
-// }
+  return response.data;
+};
 </script>
 
 <template>
   <div v-if="!loading">
     <div
       v-if="!errorMessage"
-      class="grid grid-rows-2 lg:grid-rows-1 lg:grid-cols-4 gap-4"
+      class="grid grid-rows-[max-content_1fr] lg:grid-rows-1 lg:grid-cols-4 gap-4"
     >
       <div>
         <UserDetailsSide />
@@ -81,7 +81,17 @@ const getRepositories = async () => {
       </div>
     </div>
     <div v-else>
-      <span>{{ errorMessage }}</span>
+      <ErrorMessage>
+        <span>{{ errorMessage }}</span>
+      </ErrorMessage>
+      <div>
+        <button
+          class="bg-blue hover:bg-blue-700 text-white py-2 px-3 rounded"
+          @click="getUserDetails"
+        >
+          Try Again
+        </button>
+      </div>
     </div>
   </div>
   <div v-else>

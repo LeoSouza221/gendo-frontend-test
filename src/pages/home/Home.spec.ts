@@ -1,6 +1,7 @@
 import { render, waitFor, screen } from '@testing-library/vue';
 import { setupServer } from 'msw/node';
 import { HttpResponse, http } from 'msw';
+import userEvent from '@testing-library/user-event';
 import Home from './Home.vue';
 
 let counter = 0;
@@ -11,7 +12,11 @@ const server = setupServer(
   }),
   http.get('api/users/LeoSouza221/repos', () => {
     counter += 1;
-    return HttpResponse.json({});
+    return HttpResponse.json([]);
+  }),
+  http.get('api/users/LeoSouza221/starred', () => {
+    counter += 1;
+    return HttpResponse.json([]);
   }),
 );
 
@@ -29,7 +34,7 @@ describe.only('Home', () => {
     render(Home);
 
     await waitFor(() => {
-      expect(counter).toBe(2);
+      expect(counter).toBe(3);
     });
   });
 
@@ -102,6 +107,38 @@ describe.only('Home', () => {
 
       await waitFor(() => {
         expect(screen.queryAllByText(/repo/).length).toBe(3);
+      });
+    });
+  });
+
+  describe('when success to load starred', () => {
+    it('display starred repositories on screen', async () => {
+      await render(Home);
+      let resolveFunc;
+      const user = userEvent.setup();
+      // const promise = new Promise((resolve) => {
+      //   resolveFunc = resolve;
+      // });
+
+      server.use(
+        http.get('api/users/LeoSouza221/starred', async ({}) => {
+          return HttpResponse.json([
+            { full_name: 'starRepo1' },
+            { full_name: 'starRepo2' },
+            { full_name: 'starRepo3' },
+          ]);
+        }),
+      );
+
+      // await resolveFunc();
+
+      const button = await screen.getByTestId('Starred');
+      await user.click(button);
+
+      const teste = await screen.queryAllByText(/starRepo/).length;
+
+      await waitFor(() => {
+        expect(teste).toBe(3);
       });
     });
   });

@@ -19,6 +19,10 @@ const user = inject<User>('user');
         title="Starred"
         :quantity="user?.starred_repos.length || 0"
       >
+        <ListRepos
+          :repos="user?.starred_repos ?? []"
+          is-starred
+        />
       </AppTab>
     </AppTabs>
   </div>
