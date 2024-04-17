@@ -1,6 +1,11 @@
 # gendo-frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+Projeto realizado utilizando VueJS e Tailwind para estilização, juntamente com a biblioteca de testes Testing library, onde optei por testar o comportamento das telas e componentes, nada visual
+
+- Os comandos para execução do projeto estão abaixo
+- Qualquer dúvida estou a disposição no email leosouza221@gmail.com ou [Linkedin](https://www.linkedin.com/in/leonardo-de-souza-a75557156/)
+
+[Demo](https://leosouza221.github.io/gendo-frontend-test/)
 
 ## Recommended IDE Setup
 
