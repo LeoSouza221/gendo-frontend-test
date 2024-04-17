@@ -71,11 +71,9 @@ const getStarredRepositories = async () => {
   <div v-if="!loading">
     <div
       v-if="!errorMessage"
-      class="grid grid-rows-[max-content_1fr] lg:grid-rows-1 lg:grid-cols-4 gap-4"
+      class="grid grid-rows-[max-content_1fr] grid-cols-1 gap-y-4 lg:grid-rows-1 lg:grid-cols-4 lg:gap-4"
     >
-      <div>
-        <UserDetailsSide />
-      </div>
+      <UserDetailsSide />
       <div class="col-span-3">
         <UserDetailsRepositories />
       </div>

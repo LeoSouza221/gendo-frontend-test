@@ -96,9 +96,9 @@ describe.only('Home', () => {
         http.get('api/users/LeoSouza221/repos', async ({}) => {
           await promise;
           return HttpResponse.json([
-            { full_name: 'repo1' },
-            { full_name: 'repo2' },
-            { full_name: 'repo3' },
+            { full_name: 'repo/repo1' },
+            { full_name: 'repo/repo2' },
+            { full_name: 'repo/repo3' },
           ]);
         }),
       );
@@ -113,32 +113,28 @@ describe.only('Home', () => {
 
   describe('when success to load starred', () => {
     it('display starred repositories on screen', async () => {
-      await render(Home);
+      render(Home);
+
       let resolveFunc;
-      const user = userEvent.setup();
-      // const promise = new Promise((resolve) => {
-      //   resolveFunc = resolve;
-      // });
+      const promise = new Promise((resolve) => {
+        resolveFunc = resolve;
+      });
 
       server.use(
         http.get('api/users/LeoSouza221/starred', async ({}) => {
+          await promise;
           return HttpResponse.json([
-            { full_name: 'starRepo1' },
-            { full_name: 'starRepo2' },
-            { full_name: 'starRepo3' },
+            { full_name: 'starred/starred1' },
+            { full_name: 'starred/starred2' },
+            { full_name: 'starred/starred3' },
           ]);
         }),
       );
 
-      // await resolveFunc();
-
-      const button = await screen.getByTestId('Starred');
-      await user.click(button);
-
-      const teste = await screen.queryAllByText(/starRepo/).length;
+      await resolveFunc();
 
       await waitFor(() => {
-        expect(teste).toBe(3);
+        expect(screen.queryAllByText(/starred/).length).toBe(3);
       });
     });
   });

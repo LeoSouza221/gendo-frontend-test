@@ -19,7 +19,7 @@ describe('UserDetailsSide', () => {
         },
       });
 
-      const image = screen.getByAltText('image');
+      const image = screen.getByAltText('profile_image');
       expect(image).toHaveAttribute('src', 'myImage');
     });
   });
