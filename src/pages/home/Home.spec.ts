@@ -60,6 +60,7 @@ describe.only('Home', () => {
         }),
       );
 
+      // @ts-ignore
       await resolveFunc();
 
       await waitFor(() => {
@@ -67,21 +68,6 @@ describe.only('Home', () => {
       });
     });
   });
-
-  // describe('when fail to load user', () => {
-  //   it('display error message on screen', async () => {
-  //     render(Home);
-
-  //     server.use(
-  //       http.get('api/users/LeoSouza123', () => {
-  //         return HttpResponse.error();
-  //       }),
-  //     );
-
-  //     const text = await screen.findByText('Unnexpected Error');
-  //     expect(text).toBeInTheDocument();
-  //   });
-  // });
 
   describe('when success to load repositories', () => {
     it('display repositories on screen', async () => {
@@ -99,6 +85,7 @@ describe.only('Home', () => {
         }),
       );
 
+      // @ts-ignore
       await resolveFunc();
 
       await waitFor(() => {
@@ -127,6 +114,7 @@ describe.only('Home', () => {
         }),
       );
 
+      // @ts-ignore
       await resolveFunc();
 
       await waitFor(() => {
