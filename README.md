@@ -5,8 +5,6 @@ Projeto realizado utilizando VueJS e Tailwind para estilização, juntamente com
 - Os comandos para execução do projeto estão abaixo
 - Qualquer dúvida estou a disposição no email leosouza221@gmail.com ou [Linkedin](https://www.linkedin.com/in/leonardo-de-souza-a75557156/)
 
-[Demo](https://leosouza221.github.io/gendo-frontend-test/)
-
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
