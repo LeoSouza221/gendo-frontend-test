@@ -9,7 +9,8 @@
       "node",
       "jsdom",
       "@testing-library/jest-dom",
-      "vitest/globals"
+      "vitest/globals",
+      "jest"
     ]
   }
 }

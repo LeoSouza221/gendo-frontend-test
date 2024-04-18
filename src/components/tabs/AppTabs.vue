@@ -1,11 +1,6 @@
 <script setup lang="ts">
-import { ref, provide } from 'vue';
-
-interface Tab {
-  title: string;
-  hash: string;
-  quantity: number;
-}
+import { ref, provide, type Ref } from 'vue';
+import { type Tab } from '@/@types';
 
 const activeTabHash = ref('');
 const tabs = ref<Tab[]>([]);

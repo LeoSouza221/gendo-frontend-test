@@ -21,5 +21,4 @@ export default defineConfig({
       },
     },
   },
-  base: '/gendo-frontend-test/',
 });

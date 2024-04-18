@@ -14,15 +14,16 @@ const isActive = ref(false);
 
 onBeforeMount(() => {
   hash.value = `#${title.toLowerCase().replace(/ /g, '-')}`;
-
+  // @ts-ignore
   addTab({
     title: title,
     hash: hash.value,
     quantity: quantity,
   });
 });
-
+// @ts-ignore
 watch(activeTabHash, () => {
+  // @ts-ignore
   isActive.value = activeTabHash.value === hash.value;
 });
 </script>
