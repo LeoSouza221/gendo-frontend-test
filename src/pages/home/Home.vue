@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import { ref, onMounted, reactive, provide } from 'vue';
-import { UserDetailsSide, UserDetailsRepositories, AppSpin, ErrorMessage } from '@/components';
+import {
+  UserDetailsSide,
+  UserDetailsRepositories,
+  AppSpin,
+  ErrorMessage,
+  AppInput,
+} from '@/components';
 import { type User } from '@/@types';
 import http from '@/lib/http';
 
 const loading = ref(true);
 const errorMessage = ref<string | undefined>(undefined);
+const errorInputMessage = ref<string | undefined>(undefined);
 const userName = ref('LeoSouza221');
 const user = reactive<User>({
   id: 0,
@@ -23,6 +30,8 @@ onMounted(() => {
 
 const getUserDetails = () => {
   loading.value = true;
+  errorMessage.value = undefined;
+  errorInputMessage.value = undefined;
 
   Promise.all([getUser(), getRepositories(), getStarredRepositories()])
     .then((result) => {
@@ -55,20 +64,49 @@ const getUser = async () => {
 };
 
 const getRepositories = async () => {
-  const response = await http.get('api/users/LeoSouza221/repos');
+  const response = await http.get(`api/users/${userName.value}/repos`);
 
   return response.data;
 };
 
 const getStarredRepositories = async () => {
-  const response = await http.get('api/users/LeoSouza221/starred');
+  const response = await http.get(`api/users/${userName.value}/starred`);
 
   return response.data;
+};
+
+const validateNewSearch = () => {
+  if (!userName.value.length) {
+    errorInputMessage.value = 'Enter a username';
+
+    return;
+  }
+
+  getUserDetails();
 };
 </script>
 
 <template>
   <div v-if="!loading">
+    <div class="w-full flex justify-center">
+      <div class="px-6 lg:px-0 w-[500px] flex gap-2">
+        <AppInput
+          v-model="userName"
+          placeholder="Username"
+          :errorMessage="errorInputMessage"
+          :error="!!errorInputMessage"
+          @update:update-model="validateNewSearch()"
+        />
+        <div>
+          <button
+            class="bg-blue hover:bg-blue-700 text-white py-2 px-3 rounded"
+            @click="validateNewSearch()"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+    </div>
     <div
       v-if="!errorMessage"
       class="grid grid-rows-[max-content_1fr] grid-cols-1 gap-y-4 lg:grid-rows-1 lg:grid-cols-4 lg:gap-4"
@@ -78,7 +116,10 @@ const getStarredRepositories = async () => {
         <UserDetailsRepositories />
       </div>
     </div>
-    <div v-else>
+    <div
+      class="flex flex-col items-center"
+      v-else
+    >
       <ErrorMessage>
         <span>{{ errorMessage }}</span>
       </ErrorMessage>
@@ -92,7 +133,10 @@ const getStarredRepositories = async () => {
       </div>
     </div>
   </div>
-  <div v-else>
+  <div
+    v-else
+    class="pt-8 flex items-center justify-center"
+  >
     <AppSpin />
   </div>
 </template>

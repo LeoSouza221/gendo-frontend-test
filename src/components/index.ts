@@ -12,3 +12,4 @@ export { default as ForkIcon } from './icons/ForkIcon.vue';
 export { default as StarIcon } from './icons/StarIcon.vue';
 export { default as GithubIcon } from './icons/GithubIcon.vue';
 export { default as CodeIcon } from './icons/CodeIcon.vue';
+export { default as SearchIcon } from './icons/SearchIcon.vue';

@@ -8,7 +8,7 @@ const user = inject<User>('user');
 
 <template>
   <div class="w-full px-4 flex items-center gap-4 lg:block">
-    <div class="py-3 lg:flex lg:justify-center">
+    <div class="py-3 lg:flex lg:justify-center min-w-24">
       <img
         v-if="user?.avatar_url"
         class="rounded-full w-20 h-20 lg:w-44 lg:h-44"

@@ -17,7 +17,7 @@ const filteredRepos = computed(() => {
 </script>
 
 <template>
-  <div class="px-6 lg:px-0 max-w-[400px]">
+  <div class="px-6 lg:px-0 max-w-[500px]">
     <AppInput
       v-model="search"
       placeholder="Filter by name"
