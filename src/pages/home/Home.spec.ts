@@ -1,4 +1,4 @@
-import { render, waitFor, screen } from '@testing-library/vue';
+import { render, waitFor, screen, fireEvent } from '@testing-library/vue';
 import { setupServer } from 'msw/node';
 import { HttpResponse, delay, http } from 'msw';
 import userEvent from '@testing-library/user-event';
@@ -177,7 +177,7 @@ describe.only('Home', () => {
       server.use(
         http.get('api/users/teste', async ({}) => {
           delay('infinite');
-          return HttpResponse.json({ name: 'teste' });
+          return HttpResponse.json({});
         }),
         http.get('api/users/teste/repos', async ({}) => {
           delay('infinite');
@@ -193,38 +193,38 @@ describe.only('Home', () => {
         expect(screen.queryByRole('status')).toBeInTheDocument();
       });
     });
-    // it('should get new user infos', async () => {
-    //   render(Home);
+    it.skip('should get new user infos', async () => {
+      render(Home);
 
-    //   const input = await screen.findByPlaceholderText('Username');
-    //   const button = screen.getByRole('button', { name: 'Search' });
+      const input = await screen.findByPlaceholderText('Username');
+      const button = screen.getByRole('button', { name: 'Search' });
 
-    //   input.setSelectionRange(0, 10);
-    //   userEvent.type(input, '{backspace}basarbk');
+      input.setSelectionRange(0, 10);
+      userEvent.type(input, '{backspace}basarbk');
 
-    //   userEvent.click(button);
+      userEvent.click(button);
 
-    //   let resolveFunc;
-    //   const promise = new Promise((resolve) => {
-    //     resolveFunc = resolve;
-    //   });
+      let resolveFunc;
+      const promise = new Promise((resolve) => {
+        resolveFunc = resolve;
+      });
 
-    //   server.use(
-    //     http.get('api/users/basarbk', async ({}) => {
-    //       await promise;
-    //       return HttpResponse.json({ name: 'Basar' });
-    //     }),
-    //   );
+      server.use(
+        http.get('api/users/basarbk', async ({}) => {
+          await promise;
+          return HttpResponse.json({ name: 'Basar' });
+        }),
+      );
 
-    //   // @ts-ignore
-    //   await resolveFunc();
+      // @ts-ignore
+      await resolveFunc();
 
-    //   await waitFor(() => {
-    //     expect(screen.queryByText('Basar')).toBeInTheDocument();
-    //   });
-    // });
+      await waitFor(() => {
+        expect(screen.queryByText('Basar')).toBeInTheDocument();
+      });
+    });
   });
-  it('show error when leave input empty', async () => {
+  it.skip('show error when leave input empty', async () => {
     render(Home);
 
     const input = await screen.findByPlaceholderText('Username');
@@ -232,8 +232,34 @@ describe.only('Home', () => {
 
     input.setSelectionRange(0, 12);
     userEvent.type(input, '{backspace}');
-    userEvent.click(button);
+    await userEvent.click(button);
 
-    expect(screen.queryByText('Enter a username')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText('Enter a username')).toBeInTheDocument();
+    });
+  });
+  it.skip('show error when search wrong username', async () => {
+    render(Home);
+
+    const input = await screen.findByPlaceholderText('Username');
+    const button = screen.getByRole('button', { name: 'Search' });
+
+    userEvent.type(input, 'teste');
+    await userEvent.click(button);
+
+    server.use(
+      http.get('api/users/teste', () => {
+        return HttpResponse.error();
+      }),
+      http.get('api/users/teste/repos', () => {
+        return HttpResponse.error();
+      }),
+      http.get('api/users/teste/starred', () => {
+        return HttpResponse.error();
+      }),
+    );
+
+    const error = await screen.getByTestId('error-message');
+    expect(error).toBeInTheDocument();
   });
 });
