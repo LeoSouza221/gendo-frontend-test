@@ -193,73 +193,67 @@ describe.only('Home', () => {
         expect(screen.queryByRole('status')).toBeInTheDocument();
       });
     });
-    it.skip('should get new user infos', async () => {
+    it('should get new user infos', async () => {
       render(Home);
 
       const input = await screen.findByPlaceholderText('Username');
       const button = screen.getByRole('button', { name: 'Search' });
 
-      input.setSelectionRange(0, 10);
-      userEvent.type(input, '{backspace}basarbk');
-
+      await fireEvent.update(input, 'basarbk');
       userEvent.click(button);
 
-      let resolveFunc;
-      const promise = new Promise((resolve) => {
-        resolveFunc = resolve;
-      });
-
       server.use(
-        http.get('api/users/basarbk', async ({}) => {
-          await promise;
+        http.get('api/users/basarbk', ({}) => {
           return HttpResponse.json({ name: 'Basar' });
         }),
+        http.get('api/users/basarbk/repos', ({}) => {
+          return HttpResponse.json([]);
+        }),
+        http.get('api/users/basarbk/starred', ({}) => {
+          return HttpResponse.json([]);
+        }),
       );
-
-      // @ts-ignore
-      await resolveFunc();
 
       await waitFor(() => {
         expect(screen.queryByText('Basar')).toBeInTheDocument();
       });
     });
   });
-  it.skip('show error when leave input empty', async () => {
+  it('show error when leave input empty', async () => {
     render(Home);
 
     const input = await screen.findByPlaceholderText('Username');
     const button = screen.getByRole('button', { name: 'Search' });
 
-    input.setSelectionRange(0, 12);
-    userEvent.type(input, '{backspace}');
+    await fireEvent.update(input, '');
     await userEvent.click(button);
 
     await waitFor(() => {
       expect(screen.queryByText('Enter a username')).toBeInTheDocument();
     });
   });
-  it.skip('show error when search wrong username', async () => {
+  it('show error when search wrong username', async () => {
     render(Home);
 
     const input = await screen.findByPlaceholderText('Username');
     const button = screen.getByRole('button', { name: 'Search' });
 
-    userEvent.type(input, 'teste');
+    await fireEvent.update(input, 'teste221');
     await userEvent.click(button);
 
     server.use(
-      http.get('api/users/teste', () => {
-        return HttpResponse.error();
+      http.get('api/users/teste221', ({}) => {
+        return HttpResponse.json({ message: 'Not found' }, { status: 404 });
       }),
-      http.get('api/users/teste/repos', () => {
-        return HttpResponse.error();
+      http.get('api/users/teste221/repos', ({}) => {
+        return HttpResponse.json({ message: 'Not found' }, { status: 404 });
       }),
-      http.get('api/users/teste/starred', () => {
-        return HttpResponse.error();
+      http.get('api/users/teste221/starred', ({}) => {
+        return HttpResponse.json({ message: 'Not found' }, { status: 404 });
       }),
     );
 
-    const error = await screen.getByTestId('error-message');
+    const error = await screen.findByTestId('error-message');
     expect(error).toBeInTheDocument();
   });
 });
